@@ -1,0 +1,48 @@
+{
+  $jsonSchema: {
+    required: [
+      'name',
+      'material',
+      'quantity'
+    ],
+    properties: {
+      name: {
+        bsonType: 'string',
+        description: 'Please enter a name.'
+      },
+      material: {
+        bsonType: 'string',
+        description: 'Please enter a material.'
+      },
+      polish: {
+        bsonType: 'string'
+      },
+      type: {
+        bsonType: 'string'
+      },
+      quantity: {
+        required: [
+          'storage',
+          'open',
+          'unit'
+        ],
+        properties: {
+          storage: {
+            bsonType: 'double',
+            minimum: 0,
+            description: 'please enter a number.'
+          },
+          open: {
+            bsonType: 'double',
+            minimum: 0,
+            description: 'Please enter a number.'
+          },
+          unit: {
+            bsonType: 'string',
+            description: 'Please enter a unit.'
+          }
+        }
+      }
+    }
+  }
+}
