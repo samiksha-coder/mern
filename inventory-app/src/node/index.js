@@ -1,29 +1,22 @@
 const appDebugger = require("debug")("app.startup");
-const validationDebuger = require("debug")("app.validation");
-const config = require("config");
 const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+var cors = require("cors");
 
-const logger = require("./logger");
-const authenticator = require("./authenticator");
-const courses = require("./routes/courses");
-const home = require("./routes/home");
-const genres = require("./routes/genres");
-const customers = require("./routes/customers");
+const userRouter = require("./routes/users");
 
 const app = express();
 app.use(morgan("dev"));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/", home);
+app.use("/", userRouter);
 
 const port = process.env.PORT || 3100;
-validationDebuger("config.name", config.get("name"));
-validationDebuger("config.mail", config.get("mail"));
 
 mongoose
-  .connect("mongodb://localhost/playground", {
+  .connect("mongodb://localhost/inventory", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
