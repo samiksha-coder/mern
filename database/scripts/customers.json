@@ -1,0 +1,24 @@
+{
+  "$jsonSchema": {
+    "required": [
+      "name"
+    ],
+    "properties": {
+      "name": {
+        "bsonType": "string",
+        "description": "Please enter a name."
+      },
+      "phone": {
+        "bsonType": "double",
+        "description": "Please enter a number."
+      },
+      "email": {
+        "bsonType": "string",
+        "description": "Please enter an email."
+      },
+      "address": {
+        "bsonType": "string"
+      }
+    }
+  }
+}

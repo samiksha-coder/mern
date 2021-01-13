@@ -1,0 +1,32 @@
+{
+  "$jsonSchema": {
+    "required": [
+      "date",
+      "type",
+      "with",
+      "quantity",
+      "entity"
+    ],
+    "properties": {
+      "date": {
+        "bsonType": "timestamp"
+      },
+      "type": {
+        "enum": [
+          "purchase",
+          "sale"
+        ]
+      },
+      "with": {
+        "bsonType": "objectId"
+      },
+      "quantity": {
+        "bsonType": "double",
+        "minimum": 0
+      },
+      "entity": {
+        "bsonType": "objectId"
+      }
+    }
+  }
+}

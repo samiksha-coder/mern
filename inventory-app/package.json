@@ -23,7 +23,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-service": "nodemon src/node/index.js",
+    "start-service": "nodemon src/services/index.js",
     "start-mern": "concurrently --kill-others \"npm run start-service\" \"npm start\""
   },
   "eslintConfig": {
