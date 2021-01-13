@@ -4,16 +4,24 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 var cors = require("cors");
 
-const userRouter = require("./routes/users");
+process.env["NODE_CONFIG_DIR"] = "./src/config";
+const config = require("config");
+
+const customerRouter = require("./routes/customer");
 
 const app = express();
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/", userRouter);
+app.use("/api/customer", customerRouter);
+app.use(function (req, res, next) {
+  res.status(404).send("Unable to find the requested resource!");
+});
 
 const port = process.env.PORT || 3100;
+
+console.log("config.SERVICE_URL", config.SERVICE_URL);
 
 mongoose
   .connect("mongodb://localhost/inventory", {

@@ -14,14 +14,16 @@ export default class ViewRouters extends Component {
       <BrowserRouter>
         <Header />
         <Switch>
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/transactions" component={Transactions} />
-          <Route path="/buttons" component={Buttons} />
-          <Route path="/customers" component={Customers} />
-          <Route exact path="/" component={Home} />
-          <Route path="/error">
-            <Error message="grave error" status="404" />
-          </Route>
+          <div className="px-2">
+            <Route path="/dashboard" component={Dashboard} />
+            <Route path="/transactions" component={Transactions} />
+            <Route path="/buttons" component={Buttons} />
+            <Route path="/customers" component={Customers} />
+            <Route exact path="/" component={Home} />
+            <Route path="/error">
+              <Error message="grave error" status="404" />
+            </Route>
+          </div>
         </Switch>
       </BrowserRouter>
     );

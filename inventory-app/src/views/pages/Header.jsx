@@ -4,7 +4,13 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+    <Navbar
+      collapseOnSelect
+      expand="lg"
+      bg="dark"
+      variant="dark"
+      className="mb-3"
+    >
       <Navbar.Brand as={Link} to="/">
         Home
       </Navbar.Brand>
