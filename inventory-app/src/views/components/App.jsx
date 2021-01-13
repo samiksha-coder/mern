@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
+import ViewRouters from "./utils/ViewRouters";
 
 function App() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [items, setItems] = useState([]);
+  const [item, setItems] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3100/")
       .then((response) => response.text())
       .then((jsondata) => {
+        console.log("jsondata", jsondata);
         setIsLoaded(true);
         setItems(jsondata);
       })
@@ -23,7 +25,12 @@ function App() {
   } else if (!isLoaded) {
     return <div>Loading...</div>;
   } else {
-    return <h1>{items}</h1>;
+    return (
+      <div>
+        <h1>{item}</h1>
+        <ViewRouters />
+      </div>
+    );
   }
 }
 
