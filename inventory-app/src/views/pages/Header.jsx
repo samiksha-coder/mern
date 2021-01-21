@@ -17,11 +17,14 @@ export default function Header() {
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link as={Link} to="/transactions">
+          <Nav.Link as={Link} to="/dashboard">
             Dashboard
           </Nav.Link>
           <Nav.Link as={Link} to="/transactions">
             Transactions
+          </Nav.Link>
+          <Nav.Link as={Link} to="/storage">
+            Storage
           </Nav.Link>
           <Nav.Link as={Link} to="/buttons">
             Buttons

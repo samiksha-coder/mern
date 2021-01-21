@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { validateCustomer, Customer } = require("../../models/customer");
+const { validateCustomer, Customer } = require("../../models/customers");
+const _ = require("lodash");
+const replaceID = require("../../models/commons");
 
 // router.get("/", (request, response) =>
 //   response.status(200).type("html").send("hello")
@@ -26,7 +28,12 @@ router.post("/", async (request, response) => {
 
 router.get("/", async (request, response) => {
   try {
-    const customer = await Customer.find();
+    const { query } = request;
+    if (query && query.id) {
+      query._id = query.id;
+      delete query.id;
+    }
+    const customer = await Customer.find(query);
     response.status(200).send(customer);
   } catch (error) {
     response.send(error.message);

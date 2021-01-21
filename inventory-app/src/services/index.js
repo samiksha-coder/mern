@@ -7,7 +7,8 @@ var cors = require("cors");
 process.env["NODE_CONFIG_DIR"] = "./src/config";
 const config = require("config");
 
-const customerRouter = require("./routes/customer");
+const customerRouter = require("./routes/customerRouter");
+const buttonRouter = require("./routes/buttonRouter");
 
 const app = express();
 app.use(morgan("dev"));
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/customer", customerRouter);
+app.use("/api/button", buttonRouter);
 app.use(function (req, res, next) {
   res.status(404).send("Unable to find the requested resource!");
 });
@@ -29,7 +31,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log("Connected"))
-  .catch(() => console.log("Ran into error"));
+  .catch((error) => console.log("Ran into error", error));
 
 if (app.get("env") === "development") {
   appDebugger(`debugging on ${app.get("env")}`);

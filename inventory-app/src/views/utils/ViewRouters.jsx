@@ -7,6 +7,7 @@ import Error from "../pages/Error";
 import Header from "../pages/Header";
 import Home from "../pages/Home";
 import Transactions from "../pages/Transactions";
+import Storage from "../pages/Storage";
 
 export default class ViewRouters extends Component {
   render() {
@@ -18,6 +19,7 @@ export default class ViewRouters extends Component {
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/transactions" component={Transactions} />
             <Route path="/buttons" component={Buttons} />
+            <Route path="/storage" component={Storage} />
             <Route path="/customers" component={Customers} />
             <Route exact path="/" component={Home} />
             <Route path="/error">

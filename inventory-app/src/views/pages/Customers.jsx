@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { SERVICE_URL, CUSTOMER_API } from "../../config/default.json";
-import Table from "../common/Table";
 
 export default function Customers(props) {
   const [error, setError] = useState(null);
@@ -24,25 +23,6 @@ export default function Customers(props) {
       });
   }, []);
 
-  const columns = [
-    {
-      Header: "Name",
-      accessor: "name",
-    },
-    {
-      Header: "Phone",
-      accessor: "phone",
-    },
-    {
-      Header: "Email",
-      accessor: "email",
-    },
-    {
-      Header: "Address",
-      accessor: "address",
-    },
-  ];
-
   if (error) {
     return <div>Error: {error.message}</div>;
   } else if (!isLoaded) {
@@ -59,7 +39,6 @@ export default function Customers(props) {
             </li>
           ))}
         </ul>
-        <Table data={customers} columns={columns}></Table>
       </React.Fragment>
     );
   }
