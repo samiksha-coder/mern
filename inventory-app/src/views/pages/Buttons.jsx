@@ -10,32 +10,29 @@ export default function Buttons() {
   const [formDataError] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [buttons, setButtons] = useState([]);
-  const [isUpdated, setupdated] = useState(false);
+  const [isUpdated, setUpdated] = useState(false);
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
     fetch(SERVICE_URL + BUTTON_API)
-      .then((response) => {
-        if (response.status === 200) return response.json();
-        else throw Error("Error");
-      })
-      .then((jsondata) => {
+      .then(async (response) => {
+        const jsonData = await response.json();
         setIsLoaded(true);
-        setButtons(jsondata);
+        setButtons(jsonData);
       })
       .catch((error) => {
         setIsLoaded(true);
         setError(error);
       });
-  }, [isUpdated, setupdated]);
+  }, [isUpdated, setUpdated]);
+
   const handleSubmit = async (e) => {
     const result = await saveData(formData, SERVICE_URL + BUTTON_API);
-    console.log("typeof result", typeof result);
-    if (typeof result === "object") {
-      console.log("save result", result.join);
+    if (result && typeof result === "object") {
       buttons.push(result);
-      setupdated(true);
-    } else console.log("error in save result", result);
+      setUpdated(true);
+      alert("saved!");
+    } else alert(`error in save result:\n${result}`);
   };
   const collectFormData = (e) => {
     const { id, value } = e.target;

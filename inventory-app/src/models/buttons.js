@@ -30,4 +30,23 @@ const validateButton = (input) => {
   }
 };
 
-module.exports = { Button, validateButton };
+const saveButton = async (input) => {
+  const { name, material, polish } = input;
+  let button = new Button({
+    name,
+    material,
+    polish,
+  });
+  return await button.save();
+};
+const findButton = async (input) => {
+  return await Button.find(input);
+};
+
+module.exports = {
+  Button,
+  validateButton,
+  buttonSchema: schema,
+  saveButton,
+  findButton,
+};

@@ -15,6 +15,7 @@ export const validateData = async (input, API) => {
     return null;
   }
 };
+
 export const saveData = async (input, API) => {
   try {
     let response = await fetch(API, {
@@ -22,14 +23,27 @@ export const saveData = async (input, API) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(input),
     });
-    return response.status === 200
-      ? await response.json()
-      : await response.text();
+    return await readResponse(response);
   } catch (error) {
     console.log("error", error);
     return null;
   }
 };
+
+export const getData = async (API) => {
+  const response = await fetch(API);
+  return await readResponse(response);
+};
+
+const readResponse = async (response) => {
+  const contentType = response.headers.get("Content-Type");
+  if (contentType && contentType.toString().indexOf("json") >= 0) {
+    return response.json();
+  } else if (contentType.toString().indexOf("text") >= 0) {
+    return await response.text();
+  }
+};
+
 export const setErrorMessage = (id, message) => {
   document.getElementById(id).innerHTML = message;
 };

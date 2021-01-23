@@ -1,32 +1,38 @@
 const express = require("express");
+const { Button } = require("../../models/buttons");
+const { Customer } = require("../../models/customers");
 const router = express.Router();
 const {
-  validateButton,
-  Button,
-  saveButton,
-  findButton,
-} = require("../../models/buttons");
+  Transaction,
+  validateTransaction,
+} = require("../../models/transactions");
 
 router.post("/", async (request, response) => {
-  const { body } = request;
-  const { error } = validateButton(body);
-  if (error)
-    return response
-      .type("text/html")
-      .status(400)
-      .send(error.details[0].message);
+  const { error } = validateTransaction(request.body);
+  if (error) return response.status(400).send(error.details[0].message);
+  const { button, customer, type, date } = request.body;
   try {
-    let oldButton = await findButton(body);
-    console.log("oldButton", oldButton);
+    let buttonObject = await Button.find(request.body.button);
+    console.log("oldButton", buttonObject);
+    if (!buttonObject || buttonObject.length === 0) {
+    }
+    let customerObject = await Customer.find(request.body.customer);
+
     if (!oldButton || oldButton.length === 0) {
-      const button = await saveButton(body);
-      response.type("application/json").status(200).send(button);
+      let transaction = new Transaction({
+        button,
+        customer,
+        type,
+        date,
+      });
+      await transaction.save();
+      response.status(200).send(transaction);
     } else {
-      response.status(400).type("text/html");
+      response.setHeader(("Content-Type", "text/html"));
       throw new Error("Button exists.\n" + oldButton.join(", "));
     }
   } catch (error) {
-    response.status(400).type("text/html").send(error.message);
+    response.send(error.message);
   }
 });
 
@@ -37,7 +43,7 @@ router.get("/", async (request, response) => {
       query._id = query.id;
       delete query.id;
     }
-    const button = await Button.find(query);
+    const button = await Transaction.find(query);
     response.status(200).send(button);
   } catch (error) {
     response.send(error.message);
@@ -46,7 +52,7 @@ router.get("/", async (request, response) => {
 
 router.post("/validate", async (request, response) => {
   try {
-    const error = validateButton(request.body);
+    const error = validateTransaction(request.body);
     response.status(200).send(error);
   } catch (error) {
     response.send(error.message).status(400);
@@ -59,7 +65,7 @@ router.delete("/", async (request, response) => {
     if (query && query.id) {
       query._id = query.id;
       delete query.id;
-      const button = await Button.deleteOne(query);
+      const button = await Transaction.deleteOne(query);
       response.status(200).send(button);
     } else {
       return response.send("Invalid query").status(400);

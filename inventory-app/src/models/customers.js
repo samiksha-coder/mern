@@ -47,5 +47,4 @@ const validateCustomer = (input) => {
   return schema.validate(input, { abortEarly: false });
 };
 
-exports.Customer = Customer;
-exports.validateCustomer = validateCustomer;
+module.exports = { Customer, validateCustomer, customerSchema: schema };
