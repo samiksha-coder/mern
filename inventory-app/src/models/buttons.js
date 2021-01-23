@@ -12,9 +12,9 @@ const Button = mongoose.model(
 );
 
 const schema = Joi.object({
-  name: Joi.string().required(),
-  material: Joi.string().required(),
-  polish: Joi.string().required(),
+  name: Joi.string().required().min(3).max(100),
+  material: Joi.string().required().min(3).max(100),
+  polish: Joi.string().required().min(3).max(100),
 });
 
 /**
@@ -23,8 +23,11 @@ const schema = Joi.object({
  * @returns {Object} the errors encountered if any.
  */
 const validateButton = (input) => {
-  return schema.validate(input, { abortEarly: false });
+  try {
+    return schema.validate(input, { abortEarly: false });
+  } catch (e) {
+    return e;
+  }
 };
 
-exports.Button = Button;
-exports.validateButton = validateButton;
+module.exports = { Button, validateButton };

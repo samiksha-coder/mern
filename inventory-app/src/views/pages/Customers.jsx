@@ -34,7 +34,7 @@ export default function Customers(props) {
 
         <ul className="pt-3">
           {customers.map((item) => (
-            <li key={item.id}>
+            <li key={item._id}>
               {item.name} {item.phone} {item.address} {item.email}
             </li>
           ))}

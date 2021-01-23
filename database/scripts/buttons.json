@@ -1,0 +1,81 @@
+[{
+  "_id": {
+    "$oid": "600ac14d5330565e786a7938"
+  },
+  "name": "VT-8",
+  "material": "Brass",
+  "polish": "Aluminium Black",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "600ac1695330565e786a7939"
+  },
+  "name": "VT-8",
+  "material": "Iron",
+  "polish": "Aluminium Black",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "600ac1705330565e786a793a"
+  },
+  "name": "VT-8",
+  "material": "Iron",
+  "polish": "Nickel Black",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "600ac1785330565e786a793b"
+  },
+  "name": "VT-8",
+  "material": "Iron",
+  "polish": "Nickel",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "600b031dc87d8c4f84131f5f"
+  },
+  "name": "VT-8",
+  "material": "Brass",
+  "polish": "Nickel Black",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "600c06639438d92d900571d0"
+  },
+  "name": "VT-9",
+  "material": "Brass",
+  "polish": "Aluminium",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "600c092de4c3ca55c0b62046"
+  },
+  "name": "VT-9",
+  "material": "Iron",
+  "polish": "Nickel",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "600c0b3cb6d2361b0cc80e5f"
+  },
+  "name": "VT-9",
+  "material": "Iron",
+  "polish": "Nickel Black",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "600c0dbfb6d2361b0cc80e60"
+  },
+  "name": "VT-9",
+  "material": "Brass",
+  "polish": "Aluminum",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "600c0efeb6d2361b0cc80e61"
+  },
+  "name": "VT-9",
+  "material": "Iron",
+  "polish": "Aluminum Black",
+  "__v": 0
+}]
