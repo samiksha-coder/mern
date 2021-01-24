@@ -1,6 +1,6 @@
 const express = require("express");
-const { Button } = require("../../models/buttons");
-const { Customer } = require("../../models/customers");
+const { findButton, saveButton } = require("../../models/buttons");
+const { findCustomer, saveCustomer } = require("../../models/customers");
 const router = express.Router();
 const {
   Transaction,
@@ -12,25 +12,23 @@ router.post("/", async (request, response) => {
   if (error) return response.status(400).send(error.details[0].message);
   const { button, customer, type, date } = request.body;
   try {
-    let buttonObject = await Button.find(request.body.button);
+    let buttonObject = await findButton(button);
     console.log("oldButton", buttonObject);
     if (!buttonObject || buttonObject.length === 0) {
+      buttonObject = await saveButton(button);
     }
-    let customerObject = await Customer.find(request.body.customer);
-
-    if (!oldButton || oldButton.length === 0) {
-      let transaction = new Transaction({
-        button,
-        customer,
-        type,
-        date,
-      });
-      await transaction.save();
-      response.status(200).send(transaction);
-    } else {
-      response.setHeader(("Content-Type", "text/html"));
-      throw new Error("Button exists.\n" + oldButton.join(", "));
+    let customerObject = await findCustomer(customer);
+    if (!customerObject || customerObject.length === 0) {
+      customerObject = await saveCustomer(customer);
     }
+    let transaction = new Transaction({
+      buttonObject,
+      customerObject,
+      type,
+      date,
+    });
+    await transaction.save();
+    response.status(200).send(transaction);
   } catch (error) {
     response.send(error.message);
   }
@@ -43,8 +41,11 @@ router.get("/", async (request, response) => {
       query._id = query.id;
       delete query.id;
     }
-    const button = await Transaction.find(query);
-    response.status(200).send(button);
+    const transaction = await Transaction.find(query).populate([
+      "Customer",
+      "Button",
+    ]);
+    response.status(200).send(transaction);
   } catch (error) {
     response.send(error.message);
   }

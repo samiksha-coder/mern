@@ -1,15 +1,16 @@
-const mongoose = require("mongoose");
+const { model, Schema } = require("mongoose");
 const Joi = require("joi");
-const { Button, buttonSchema } = require("./buttons");
-const { Customer, customerSchema } = require("./customers");
+const { buttonSchema } = require("./buttons");
+const { customerSchema } = require("./customers");
 
-const Transaction = mongoose.model(
+const Transaction = model(
   "Transaction",
-  new mongoose.Schema({
-    button: { type: Button, required: true },
-    customer: { type: Customer, required: true },
+  new Schema({
+    button: { type: Schema.Types.ObjectId, ref: "Button", required: true },
+    customer: { type: Schema.Types.ObjectId, ref: "Customer", required: true },
     date: { type: Date, default: new Date() },
     type: { type: String, enum: ["sell", "buy"], required: true },
+    quantity: { type: Number, required: true },
   })
 );
 
@@ -18,6 +19,7 @@ const schema = Joi.object({
   customer: customerSchema,
   date: Joi.date(),
   type: Joi.string().valid("sell", "buy"),
+  quantity: Joi.number().required(),
 });
 
 /**

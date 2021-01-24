@@ -47,4 +47,24 @@ const validateCustomer = (input) => {
   return schema.validate(input, { abortEarly: false });
 };
 
-module.exports = { Customer, validateCustomer, customerSchema: schema };
+const saveCustomer = async (input) => {
+  const { name, email, phone, address } = input;
+  let customer = new Customer({
+    name,
+    email,
+    phone,
+    address,
+  });
+  return await customer.save();
+};
+const findCustomer = async (input) => {
+  return await Customer.find(input);
+};
+
+module.exports = {
+  Customer,
+  validateCustomer,
+  customerSchema: schema,
+  saveCustomer,
+  findCustomer,
+};
