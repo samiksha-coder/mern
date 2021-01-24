@@ -37,7 +37,7 @@ router.get("/", async (request, response) => {
       query._id = query.id;
       delete query.id;
     }
-    const button = await Button.find(query);
+    const button = await findButton(query);
     response.status(200).send(button);
   } catch (error) {
     response.send(error.message);

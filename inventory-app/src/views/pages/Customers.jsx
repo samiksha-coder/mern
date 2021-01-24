@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SERVICE_URL, CUSTOMER_API } from "../../config/default.json";
+import { SERVICE_URL, API } from "../../config/default.json";
 
 export default function Customers(props) {
   const [error, setError] = useState(null);
@@ -7,7 +7,7 @@ export default function Customers(props) {
   const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
-    fetch(SERVICE_URL + CUSTOMER_API)
+    fetch(SERVICE_URL + API.CUSTOMER)
       .then((response) => {
         if (response.status === 200) return response.json();
         else throw Error("Error");

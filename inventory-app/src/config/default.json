@@ -1,5 +1,8 @@
 {
-    "SERVICE_URL": "http://localhost:3100/",
-    "CUSTOMER_API": "api/customer",
-    "BUTTON_API": "api/button"
+    "SERVICE_URL": "http://localhost:3100",
+    "API":{
+        "CUSTOMER": "/api/customer",
+        "BUTTON": "/api/button",
+        "STORAGE": "/api/storage"
+    }
 }

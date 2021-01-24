@@ -40,7 +40,7 @@ const saveButton = async (input) => {
   return await button.save();
 };
 const findButton = async (input) => {
-  return await Button.find(input);
+  return await Button.find(input).sort("-name material polish");
 };
 
 module.exports = {

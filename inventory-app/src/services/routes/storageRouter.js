@@ -9,18 +9,20 @@ const {
 } = require("../../models/storages");
 
 router.post("/", async (request, response) => {
-  const { body } = request;
-  const { error } = validateStorage(body);
+  let input = request.body;
+  if (typeof input.button === "string") input.button = JSON.parse(input.button);
+  const { error } = validateStorage(input);
   if (error)
     return response
       .type("text/html")
       .status(400)
       .send(error.details[0].message);
   try {
-    let oldButton = await findButton(body.button);
+    let oldButton = await findButton(input.button);
+    console.log("oldButton", oldButton);
     if (oldButton && oldButton.length > 0) {
       let storage = [];
-      let storageInput = body;
+      let storageInput = input;
       for (let button in oldButton) {
         storageInput.button = oldButton[button]._id;
         const saved = await saveStorage(storageInput);

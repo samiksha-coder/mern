@@ -18,9 +18,17 @@ export const validateData = async (input, API) => {
 
 export const saveData = async (input, API) => {
   try {
+    // const button = JSON.stringify(input.button);
+    // input.button = button;
+    console.log("input", input);
+    console.log("stringified", JSON.stringify(input));
     let response = await fetch(API, {
       method: "post",
-      headers: { "Content-Type": "application/json" },
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Disposition": "form-data",
+      },
       body: JSON.stringify(input),
     });
     return await readResponse(response);
@@ -46,4 +54,12 @@ const readResponse = async (response) => {
 
 export const setErrorMessage = (id, message) => {
   document.getElementById(id).innerHTML = message;
+};
+
+export const collectFormData = (e, formData, setFormData) => {
+  const { id, value } = e.target;
+  console.log(id, value);
+  let data = formData;
+  data[id] = value;
+  setFormData(data);
 };

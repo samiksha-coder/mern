@@ -24,7 +24,7 @@ const schema = Joi.object({
  * @returns {Object} the errors encountered if any.
  */
 const validateStorage = (input) => {
-  return schema.validate(input, { abortEarly: false });
+  return schema.validate(input, { abortEarly: false, stripUnknown: true });
 };
 
 const saveStorage = async (input) => {
@@ -48,10 +48,7 @@ const updateStorage = async (input) => {
 const findStorage = async (input) => {
   return await Storage.find(input)
     .populate("button")
-    .sort([
-      ["updated", -1],
-      ["button._name", 1],
-    ]);
+    .sort("-updated button._name");
 };
 
 module.exports = {
