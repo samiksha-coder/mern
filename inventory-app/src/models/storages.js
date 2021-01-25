@@ -50,7 +50,6 @@ const updateStorage = async (object, input) => {
     })
     .populate("button");
   await storage.save();
-  console.log("storage", storage);
   return storage;
 };
 const findStorage = async (input) => {

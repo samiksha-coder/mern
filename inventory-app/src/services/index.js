@@ -32,7 +32,7 @@ const port = process.env.PORT || 3100;
 console.log("config.SERVICE_URL", config.SERVICE_URL);
 
 mongoose
-  .connect("mongodb://localhost/inventory", {
+  .connect(config.DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

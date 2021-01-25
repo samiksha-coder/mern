@@ -24,7 +24,7 @@ const schema = Joi.object({
  */
 const validateButton = (input) => {
   try {
-    return schema.validate(input, { abortEarly: false });
+    return schema.validate(input, { abortEarly: false, stripUnknown: true });
   } catch (e) {
     return e;
   }
