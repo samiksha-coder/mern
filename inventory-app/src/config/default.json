@@ -4,5 +4,9 @@
         "CUSTOMER": "/api/customer",
         "BUTTON": "/api/button",
         "STORAGE": "/api/storage"
+    }, 
+    "ENUM": {
+        "UNIT": ["grs", "pcs", "pkt"],
+        "TX_TYPE": ["BUY", "SELL"]
     }
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 
-import { SERVICE_URL, API } from "../../config/default.json";
+import { SERVICE_URL, API, ENUM } from "../../config/default.json";
 import { collectFormData, saveData } from "../common/customHooks";
 
 export default function Storage() {
@@ -40,6 +40,11 @@ export default function Storage() {
           {button.name} {button.material} {button.polish}
         </option>
       );
+    });
+  };
+  const createUnitDropdown = () => {
+    return ENUM.UNIT.map((unit) => {
+      return <option value={unit}>{unit}</option>;
     });
   };
 
@@ -96,9 +101,12 @@ export default function Storage() {
           <Form.Group controlId="unit">
             <Form.Label>Unit</Form.Label>
             <Form.Control
-              type="text"
+              as="select"
               onChange={(e) => collectFormData(e, formData, setFormData)}
-            />
+            >
+              <option>Please Select</option>
+              {ENUM.UNIT && createUnitDropdown()}
+            </Form.Control>
           </Form.Group>
           <Form.Group controlId="submit">
             <Button onClick={(e) => handleSubmit(e)}>Submit</Button>

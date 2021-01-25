@@ -1,13 +1,15 @@
 const { model, Schema } = require("mongoose");
 const Joi = require("joi");
+const config = require("config");
 const { buttonSchema } = require("./buttons");
+const { UNIT } = config.ENUM;
 
 const Storage = model(
   "Storage",
   new Schema({
     button: { type: Schema.Types.ObjectId, ref: "Button", required: true },
     quantity: { type: Number, required: true },
-    unit: { type: String, required: true },
+    unit: { type: String, enum: UNIT, required: true },
     updated: { type: Date, default: Date.now },
   })
 );
@@ -15,11 +17,13 @@ const Storage = model(
 const schema = Joi.object({
   button: buttonSchema.required(),
   quantity: Joi.number().required(),
-  unit: Joi.string().required(),
+  unit: Joi.string()
+    .valid(...UNIT)
+    .required(),
 });
 
 /**
- * Validates the user input.
+ * Validates the storage input.
  * @param {Object} input to validate.
  * @returns {Object} the errors encountered if any.
  */
