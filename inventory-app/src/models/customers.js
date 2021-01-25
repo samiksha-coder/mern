@@ -60,6 +60,9 @@ const saveCustomer = async (input) => {
 const findCustomer = async (input) => {
   return await Customer.find(input);
 };
+const getCustomerOptions = async (input) => {
+  return await Customer.find(input).select("name _id").sort("name");
+};
 
 module.exports = {
   Customer,
@@ -67,4 +70,5 @@ module.exports = {
   customerSchema: schema,
   saveCustomer,
   findCustomer,
+  getCustomerOptions,
 };

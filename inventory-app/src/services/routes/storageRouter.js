@@ -20,18 +20,17 @@ router.post("/", async (request, response) => {
   try {
     let oldButton = await findButton(input.button);
     console.log("oldButton", oldButton);
-    if (oldButton && oldButton.length > 0) {
-      let storage = [];
-      let storageInput = input;
-      for (let button in oldButton) {
-        storageInput.button = oldButton[button]._id;
-        const saved = await saveStorage(storageInput);
-        storage.push(saved);
-      }
-      response.type("application/json").status(200).send(storage);
-    } else {
+    if (!oldButton || oldButton.length === 0) {
       response.status(400).type("text/html");
       throw new Error("Button does not exist.");
+    }
+    let storage = [];
+    let storageInput = input;
+    for (let button in oldButton) {
+      storageInput.button = oldButton[button]._id;
+      const saved = await saveStorage(storageInput);
+      storage.push(saved);
+      response.type("application/json").status(200).send(storage);
     }
   } catch (error) {
     response.status(400).type("text/html").send(error.message);

@@ -3,7 +3,9 @@
     "API":{
         "CUSTOMER": "/api/customer",
         "BUTTON": "/api/button",
-        "STORAGE": "/api/storage"
+        "STORAGE": "/api/storage",
+        "TRANSACTION": "/api/transactions",
+        "OPTIONS": "/options"
     }, 
     "ENUM": {
         "UNIT": ["grs", "pcs", "pkt"],

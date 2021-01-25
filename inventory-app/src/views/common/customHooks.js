@@ -1,3 +1,5 @@
+import { ENUM } from "../../config/default.json";
+
 export const validateData = async (input, API) => {
   let result = [];
   try {
@@ -36,6 +38,18 @@ export const saveData = async (input, API) => {
     console.log("error", error);
     return null;
   }
+};
+
+export const getUnitDropdown = () => {
+  return ENUM.UNIT.map((unit) => {
+    return <option value={unit}>{unit}</option>;
+  });
+};
+
+export const getTypeDropdown = () => {
+  return ENUM.TX_TYPE.map((type) => {
+    return <option value={type}>{type}</option>;
+  });
 };
 
 export const getData = async (API) => {

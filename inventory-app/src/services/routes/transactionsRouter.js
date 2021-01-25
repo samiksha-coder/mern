@@ -1,33 +1,43 @@
 const express = require("express");
-const { findButton, saveButton } = require("../../models/buttons");
-const { findCustomer, saveCustomer } = require("../../models/customers");
+const {
+  findStorageObject,
+  saveStorage,
+  updateStorage,
+} = require("../../models/storages");
 const router = express.Router();
 const {
   Transaction,
   validateTransaction,
+  saveTransaction,
 } = require("../../models/transactions");
 
 router.post("/", async (request, response) => {
-  const { error } = validateTransaction(request.body);
+  let input = request.body;
+  let { button, type, quantity, unit } = input;
+  const { error } = validateTransaction(input);
   if (error) return response.status(400).send(error.details[0].message);
-  const { button, customer, type, date } = request.body;
   try {
-    let buttonObject = await findButton(button);
-    console.log("oldButton", buttonObject);
-    if (!buttonObject || buttonObject.length === 0) {
-      buttonObject = await saveButton(button);
+    let storageObject = await findStorageObject({ button, unit });
+    if (!storageObject || storageObject.length === 0)
+      storageObject = await saveStorage({ button, unit, quantity: 0 });
+
+    let finalQuanity;
+    if (type === "SELL") {
+      finalQuanity = storageObject.quantity - quantity;
+      if (finalQuanity < 0)
+        return response.status(400).send("Negetive quantity transaction");
     }
-    let customerObject = await findCustomer(customer);
-    if (!customerObject || customerObject.length === 0) {
-      customerObject = await saveCustomer(customer);
-    }
-    let transaction = new Transaction({
-      buttonObject,
-      customerObject,
-      type,
-      date,
+    if (type === "BUY") finalQuanity = storageObject.quantity + quantity;
+
+    let transaction = await saveTransaction(input);
+    transaction.populate("button customer");
+
+    updateStorage(storageObject, {
+      button: transaction.button,
+      quantity: finalQuanity,
+      unit,
     });
-    await transaction.save();
+
     response.status(200).send(transaction);
   } catch (error) {
     response.send(error.message);
@@ -41,10 +51,9 @@ router.get("/", async (request, response) => {
       query._id = query.id;
       delete query.id;
     }
-    const transaction = await Transaction.find(query).populate([
-      "Customer",
-      "Button",
-    ]);
+    const transaction = await Transaction.find(query).populate(
+      "customer button"
+    );
     response.status(200).send(transaction);
   } catch (error) {
     response.send(error.message);

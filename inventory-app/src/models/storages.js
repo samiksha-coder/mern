@@ -35,22 +35,31 @@ const saveStorage = async (input) => {
   const { button, quantity, unit } = input;
   console.log("button", button);
   let storage = new Storage({
-    button: button._id,
+    button: button,
     quantity,
     unit,
   });
   return await storage.save();
 };
-const updateStorage = async (input) => {
+const updateStorage = async (object, input) => {
   const { button, unit, quantity } = input;
-  console.log("button", button);
-  let storage = (await Storage.findOneAndUpdate({ button, unit })).$set({
-    quantity,
-  });
+  let storage = (await Storage.findByIdAndUpdate(object._id, { button, unit }))
+    .$set({
+      quantity,
+      updated: new Date(),
+    })
+    .populate("button");
+  await storage.save();
+  console.log("storage", storage);
   return storage;
 };
 const findStorage = async (input) => {
   return await Storage.find(input)
+    .populate("button")
+    .sort("-updated button._name");
+};
+const findStorageObject = async (input) => {
+  return await Storage.findOne(input)
     .populate("button")
     .sort("-updated button._name");
 };
@@ -61,4 +70,5 @@ module.exports = {
   findStorage,
   saveStorage,
   updateStorage,
+  findStorageObject,
 };

@@ -1,14 +1,44 @@
 const { model, Schema } = require("mongoose");
 const Joi = require("joi");
-const { buttonSchema } = require("./buttons");
-const { customerSchema } = require("./customers");
 const config = require("config");
 
 const Transaction = model(
   "Transaction",
   new Schema({
-    button: { type: Schema.Types.ObjectId, ref: "Button", required: true },
-    customer: { type: Schema.Types.ObjectId, ref: "Customer", required: true },
+    button: {
+      type: Schema.Types.ObjectId,
+      ref: "Button",
+      required: true,
+      validate: {
+        validator: function (_id) {
+          return new Promise(function (resolve, reject) {
+            let button = model("Button");
+            button
+              .findOne({ _id })
+              .then((result) => resolve(result))
+              .catch((error) => reject(error));
+          });
+        },
+        message: "Could not find button.",
+      },
+    },
+    customer: {
+      type: Schema.Types.ObjectId,
+      ref: "Customer",
+      required: true,
+      validate: {
+        validator: function (_id) {
+          return new Promise(function (resolve, reject) {
+            let customer = model("Customer");
+            customer
+              .findOne({ _id })
+              .then((result) => resolve(result))
+              .catch((error) => reject(error));
+          });
+        },
+        message: "Could not find customer.",
+      },
+    },
     date: { type: Date, default: Date.now },
     type: { type: String, enum: config.ENUM.TX_TYPE, required: true },
     quantity: { type: Number, required: true },
@@ -17,8 +47,8 @@ const Transaction = model(
 );
 
 const schema = Joi.object({
-  button: buttonSchema,
-  customer: customerSchema,
+  button: Joi.string().required(),
+  customer: Joi.string().required(),
   type: Joi.string()
     .valid(...config.ENUM.TX_TYPE)
     .required(),
@@ -29,7 +59,7 @@ const schema = Joi.object({
 });
 
 /**
- * Validates the user input.
+ * Validates the transaction input.
  * @param {Object} input to validate.
  * @returns {Object} the errors encountered if any.
  */
@@ -37,5 +67,16 @@ const validateTransaction = (input) => {
   return schema.validate(input, { abortEarly: false, stripUnknown: true });
 };
 
-exports.Transaction = Transaction;
-exports.validateTransaction = validateTransaction;
+const saveTransaction = async (input) => {
+  const { button, customer, type, quantity, unit } = input;
+  let transaction = new Transaction({
+    button,
+    customer,
+    type,
+    quantity,
+    unit,
+  });
+  return await transaction.save();
+};
+
+module.exports = { Transaction, validateTransaction, saveTransaction };

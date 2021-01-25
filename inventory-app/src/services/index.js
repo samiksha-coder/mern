@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(config.API.CUSTOMER, customerRouter);
 app.use(config.API.BUTTON, buttonRouter);
-app.use("/api/transactions", transactionsRouter);
+app.use(config.API.TRANSACTION, transactionsRouter);
 app.use(config.API.STORAGE, storageRouter);
 
 app.use(function (req, res, next) {
