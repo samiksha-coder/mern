@@ -29,7 +29,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start-service": "nodemon src/services/index.js",
-    "start-mern": "concurrently --kill-others \"npm run start-service\" \"npm start\""
+    "start-mern": "concurrently --kill-others \"npm run start-service\" \"npm start\"",
+    "debug-service": "nodemon --inspect src/services/index.js",
+    "debug-mern": "concurrently --kill-others \"npm run debug-service\" \"npm start\""
   },
   "eslintConfig": {
     "extends": [
