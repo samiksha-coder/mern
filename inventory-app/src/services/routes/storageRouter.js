@@ -6,6 +6,7 @@ const {
   Storage,
   saveStorage,
   findStorage,
+  updateStorage,
 } = require("../../models/storages");
 
 router.post("/", async (request, response) => {
@@ -32,6 +33,23 @@ router.post("/", async (request, response) => {
       storage.push(saved);
       response.type("application/json").status(200).send(storage);
     }
+  } catch (error) {
+    response.status(400).type("text/html").send(error.message);
+  }
+});
+
+router.put("/", async (request, response) => {
+  let input = request.body;
+  if (typeof input.button === "string") input.button = JSON.parse(input.button);
+  const { error } = validateStorage(input);
+  if (error)
+    return response
+      .type("text/html")
+      .status(400)
+      .send(error.details[0].message);
+  try {
+    let { _id } = input;
+    updateStorage({ _id }, input);
   } catch (error) {
     response.status(400).type("text/html").send(error.message);
   }

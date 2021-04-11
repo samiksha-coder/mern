@@ -9,7 +9,7 @@
         "OPTIONS": "/options"
     }, 
     "ENUM": {
-        "UNIT": ["grs", "pcs", "pkt"],
+        "UNIT": ["grs", "pcs", "pkt", "carton"],
         "TX_TYPE": ["BUY", "SELL"]
     }
 }
