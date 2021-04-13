@@ -40,6 +40,28 @@ export const saveData = async (input, API) => {
   }
 };
 
+export const updateData = async (input, API) => {
+  try {
+    // const button = JSON.stringify(input.button);
+    // input.button = button;
+    console.log("input", input);
+    console.log("stringified", JSON.stringify(input));
+    let response = await fetch(API, {
+      method: "put",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Disposition": "form-data",
+      },
+      body: JSON.stringify(input),
+    });
+    return await readResponse(response);
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
+};
+
 export const getUnitDropdown = () => {
   return ENUM.UNIT.map((unit) => {
     return <option value={unit}>{unit}</option>;
@@ -76,4 +98,14 @@ export const collectFormData = (e, formData, setFormData) => {
   let data = formData;
   data[id] = value;
   setFormData(data);
+};
+
+export const dateFormatter = (input) => {
+  const dateObj = new Date(input);
+  const dateFormat = new Intl.DateTimeFormat("en-GB", {
+    dateStyle: "short",
+    timeStyle: "medium",
+    hour12: true,
+  });
+  return dateFormat.format(dateObj);
 };

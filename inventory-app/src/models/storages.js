@@ -42,8 +42,12 @@ const saveStorage = async (input) => {
   return await storage.save();
 };
 const updateStorage = async (object, input) => {
+  console.log(`object`, object);
+  console.log(`input`, input);
   const { button, unit, quantity } = input;
-  let storage = (await Storage.findByIdAndUpdate(object._id, { button, unit }))
+  let storage = (
+    await Storage.findOneAndUpdate({ _id: object._id }, { button, unit })
+  )
     .$set({
       quantity,
       updated: new Date(),
@@ -53,6 +57,7 @@ const updateStorage = async (object, input) => {
   return storage;
 };
 const findStorage = async (input) => {
+  console.log(`input`, input);
   return await Storage.find(input)
     .populate("button")
     .sort("-updated button._name");
