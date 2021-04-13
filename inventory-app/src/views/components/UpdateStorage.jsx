@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 
 import { ENUM } from "../../config/default.json";
-import { collectFormData } from "../common/customHooks";
+import { collectFormData, getUnitDropdown } from "../common/customHooks";
 
 export default function UpdateStorage(props) {
   const [formData, setFormData] = useState({});
@@ -21,11 +21,6 @@ export default function UpdateStorage(props) {
           {button.name} {button.material} {button.polish}
         </option>
       );
-    });
-  };
-  const createUnitDropdown = (unit) => {
-    return ENUM.UNIT.map((unit) => {
-      return <option value={unit}>{unit}</option>;
     });
   };
 
@@ -71,7 +66,7 @@ export default function UpdateStorage(props) {
                 onChange={(e) => collectFormData(e, formData, setFormData)}
               >
                 <option>Please Select</option>
-                {ENUM.UNIT && createUnitDropdown()}
+                {ENUM.UNIT && getUnitDropdown()}
               </Form.Control>
             </Form.Group>
           </Modal.Body>

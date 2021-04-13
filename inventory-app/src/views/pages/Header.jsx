@@ -29,9 +29,6 @@ export default function Header() {
           <Nav.Link as={Link} to="/buttons">
             Buttons
           </Nav.Link>
-          <Nav.Link as={Link} to="/customers">
-            Customers
-          </Nav.Link>
           <NavDropdown title="Actions" id="collasible-nav-dropdown">
             <NavDropdown.Item as={Link} to="/newButton">
               New Button Type

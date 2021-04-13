@@ -8,7 +8,7 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { SERVICE_URL, API } from "../../config/default.json";
 import { saveData } from "../common/customHooks";
 import { dateFormatter } from "../common/tableRenderHooks";
-import UpdateStorage from "./UpdateStorage";
+import UpdateStorage from "../components/UpdateStorage";
 
 export default function Storage() {
   const [error, setError] = useState(null);

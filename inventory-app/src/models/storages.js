@@ -7,7 +7,23 @@ const { UNIT } = config.ENUM;
 const Storage = model(
   "Storage",
   new Schema({
-    button: { type: Schema.Types.ObjectId, ref: "Button", required: true },
+    button: {
+      type: Schema.Types.ObjectId,
+      ref: "Button",
+      required: true,
+      validate: {
+        validator: function (_id) {
+          return new Promise(function (resolve, reject) {
+            let button = model("Button");
+            button
+              .findOne({ _id })
+              .then((result) => resolve(result))
+              .catch((error) => reject(error));
+          });
+        },
+        message: "Could not find button.",
+      },
+    },
     quantity: { type: Number, required: true },
     unit: { type: String, enum: UNIT, required: true },
     updated: { type: Date, default: Date.now },
@@ -41,20 +57,17 @@ const saveStorage = async (input) => {
   });
   return await storage.save();
 };
-const updateStorage = async (object, input) => {
-  console.log(`object`, object);
+const updateStorage = async (filter, input) => {
+  console.log(`filter`, filter);
   console.log(`input`, input);
   const { button, unit, quantity } = input;
   let storage = (
-    await Storage.findOneAndUpdate({ _id: object._id }, { button, unit })
-  )
-    .$set({
-      quantity,
-      updated: new Date(),
-    })
-    .populate("button");
+    await Storage.findOneAndUpdate(filter, { quantity, unit })
+  ).$set({
+    updated: new Date(),
+  });
   await storage.save();
-  return storage;
+  return await storage.populate("button");
 };
 const findStorage = async (input) => {
   console.log(`input`, input);

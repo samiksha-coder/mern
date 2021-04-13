@@ -20,7 +20,6 @@ export default class ViewRouters extends Component {
             <Route path="/transactions" component={Transactions} />
             <Route path="/buttons" component={Buttons} />
             <Route path="/storage" component={Storage} />
-            <Route path="/customers" component={Customers} />
             <Route exact path="/" component={Home} />
             <Route path="/error">
               <Error message="grave error" status="404" />

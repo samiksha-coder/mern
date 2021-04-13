@@ -1,5 +1,4 @@
 const express = require("express");
-const { findButton } = require("../../models/buttons");
 const router = express.Router();
 const {
   validateStorage,
@@ -19,20 +18,20 @@ router.post("/", async (request, response) => {
       .status(400)
       .send(error.details[0].message);
   try {
-    let oldButton = await findButton(input.button);
-    console.log("oldButton", oldButton);
-    if (!oldButton || oldButton.length === 0) {
-      response.status(400).type("text/html");
-      throw new Error("Button does not exist.");
+    let storages = await findStorage({
+      button: input.button,
+      unit: input.unit,
+    });
+    let savedStorages = [];
+    for (let index in storages) {
+      const saved = await updateStorage({ _id: storages[index]._id }, input);
+      savedStorages.push(saved);
     }
-    let storage = [];
-    let storageInput = input;
-    for (let button in oldButton) {
-      storageInput.button = oldButton[button]._id;
-      const saved = await saveStorage(storageInput);
-      storage.push(saved);
-      response.type("application/json").status(200).send(storage);
+    if (storages.length === 0) {
+      const saved = await saveStorage(input);
+      savedStorages.push(saved);
     }
+    response.type("application/json").status(200).send(savedStorages);
   } catch (error) {
     response.status(400).type("text/html").send(error.message);
   }
