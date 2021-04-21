@@ -4,6 +4,7 @@ import { SERVICE_URL, API } from "../../config/default.json";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { saveData, collectFormData } from "../common/customHooks";
+import { Col, Row } from "react-bootstrap";
 
 export default function Buttons() {
   const [error, setError] = useState(null);
@@ -56,33 +57,39 @@ export default function Buttons() {
     return (
       <React.Fragment>
         <h1>Buttons</h1>
-        <ul className="pt-3">{buttons && iterateButton()}</ul>
-        <Form id="newButton">
-          <Form.Group controlId="name">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              onChange={(e) => collectFormData(e, formData, setFormData)}
-            />
-          </Form.Group>
-          <Form.Group controlId="material">
-            <Form.Label>Material</Form.Label>
-            <Form.Control
-              type="text"
-              onChange={(e) => collectFormData(e, formData, setFormData)}
-            />
-          </Form.Group>
-          <Form.Group controlId="polish">
-            <Form.Label>Polish</Form.Label>
-            <Form.Control
-              type="text"
-              onChange={(e) => collectFormData(e, formData, setFormData)}
-            />
-          </Form.Group>
-          <Form.Group controlId="submit">
-            <Button onClick={(e) => handleSubmit(e)}>Submit</Button>
-          </Form.Group>
-        </Form>
+        <Row>
+          <Col>
+            <Form id="newButton">
+              <Form.Group controlId="name">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  onChange={(e) => collectFormData(e, formData, setFormData)}
+                />
+              </Form.Group>
+              <Form.Group controlId="material">
+                <Form.Label>Material</Form.Label>
+                <Form.Control
+                  type="text"
+                  onChange={(e) => collectFormData(e, formData, setFormData)}
+                />
+              </Form.Group>
+              <Form.Group controlId="polish">
+                <Form.Label>Polish</Form.Label>
+                <Form.Control
+                  type="text"
+                  onChange={(e) => collectFormData(e, formData, setFormData)}
+                />
+              </Form.Group>
+              <Form.Group controlId="submit">
+                <Button onClick={(e) => handleSubmit(e)}>Submit</Button>
+              </Form.Group>
+            </Form>
+          </Col>
+          <Col>
+            <ul className="pt-3">{buttons && iterateButton()}</ul>
+          </Col>
+        </Row>
       </React.Fragment>
     );
   }
