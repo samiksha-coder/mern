@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import { AgGridColumn, AgGridReact } from "ag-grid-react";
+
+import "ag-grid-enterprise";
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 
 import { SERVICE_URL, API, ENUM } from "../../config/default.json";
 import {
@@ -8,15 +13,17 @@ import {
   getUnitDropdown,
   getTypeDropdown,
 } from "../common/customHooks";
+import { txDateFormatter } from "../common/tableRenderHooks";
+import UpdateTransaction from "../components/UpdateTransaction";
 
 export default function Transactions() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [transaction, setTransaction] = useState([]);
-  const [formData, setFormData] = useState({});
   const [buttons, setButtons] = useState([]);
-  const [customers, setCustomers] = useState([]);
   const [isUpdated, setUpdated] = useState(false);
+  const [gridApi, setGridApi] = useState(null);
+  const [gridColumnApi, setGridColumnApi] = useState(null);
 
   useEffect(() => {
     fetch(SERVICE_URL + API.TRANSACTION)
@@ -38,14 +45,6 @@ export default function Transactions() {
       .catch((error) => {
         setError(error);
       });
-    fetch(SERVICE_URL + API.CUSTOMER + API.OPTIONS)
-      .then(async (response) => {
-        const jsonData = await response.json();
-        setCustomers(jsonData);
-      })
-      .catch((error) => {
-        setError(error);
-      });
   }, [isUpdated, setUpdated]);
 
   const createButtonDropdown = () => {
@@ -58,13 +57,7 @@ export default function Transactions() {
     });
   };
 
-  const createCustomerDropdown = () => {
-    return customers.map((customer) => {
-      return <option value={customer._id}>{customer.name}</option>;
-    });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, formData) => {
     const result = await saveData(formData, SERVICE_URL + API.TRANSACTION);
     if (result && typeof result === "object") {
       setUpdated(true);
@@ -73,22 +66,37 @@ export default function Transactions() {
     } else alert(`error in save result:\n${result}`);
   };
 
-  const iterateTransaction = () => {
-    const list = transaction.map((item) => {
-      console.log("item", item);
-      const { quantity, unit, type } = item;
-      const { name, material, polish } = item.button;
-      const { name: user } = item.customer;
-      const dateObj = new Date(item.date);
-      let updated = `${dateObj.toLocaleDateString()} ${dateObj.toLocaleTimeString()}`;
-      return (
-        <li key={item._id}>
-          {name} {material} {polish}: {quantity} {unit} {updated} {user} {type}
-        </li>
-      );
-    });
-    return list;
+  const onGridReady = (params) => {
+    setGridApi(params.api);
+    setGridColumnApi(params.columnApi);
   };
+
+  const columnDefs = [
+    {
+      headerName: "Button",
+      children: [
+        { field: "button.name", headerName: "Name", sortable: true },
+        { field: "button.material", headerName: "Material", sortable: true },
+        { field: "button.polish", headerName: "Polish", sortable: true },
+      ],
+    },
+    {
+      headerName: "Transactions",
+      children: [
+        { field: "type", sortable: true },
+        { field: "quantity", sortable: true },
+        { field: "unit", sortable: true },
+        {
+          field: "date",
+          sortable: true,
+          valueFormatter: txDateFormatter,
+          width: 200,
+        },
+      ],
+    },
+  ];
+
+  columnDefs.valueFormatter = txDateFormatter;
 
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -97,60 +105,27 @@ export default function Transactions() {
   } else {
     return (
       <React.Fragment>
-        <h1>Transaction</h1>
-        <ul>{transaction && iterateTransaction()}</ul>
-        <Form>
-          <Form.Group controlId="button">
-            <Form.Label>Button</Form.Label>
-            <Form.Control
-              as="select"
-              onChange={(e) => collectFormData(e, formData, setFormData)}
-            >
-              <option>Please Select</option>
-              {buttons && createButtonDropdown()}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group controlId="quantity">
-            <Form.Label>Quantity</Form.Label>
-            <Form.Control
-              type="number"
-              onChange={(e) => collectFormData(e, formData, setFormData)}
-            />
-          </Form.Group>
-          <Form.Group controlId="unit">
-            <Form.Label>Unit</Form.Label>
-            <Form.Control
-              as="select"
-              onChange={(e) => collectFormData(e, formData, setFormData)}
-            >
-              <option>Please Select</option>
-              {ENUM.UNIT && getUnitDropdown()}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group controlId="customer">
-            <Form.Label>Customer</Form.Label>
-            <Form.Control
-              as="select"
-              onChange={(e) => collectFormData(e, formData, setFormData)}
-            >
-              <option>Please Select</option>
-              {customers && createCustomerDropdown()}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group controlId="type">
-            <Form.Label>Type</Form.Label>
-            <Form.Control
-              as="select"
-              onChange={(e) => collectFormData(e, formData, setFormData)}
-            >
-              <option>Please Select</option>
-              {ENUM.TX_TYPE && getTypeDropdown()}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group controlId="submit">
-            <Button onClick={(e) => handleSubmit(e)}>Submit</Button>
-          </Form.Group>
-        </Form>
+        <h1 style={{ display: "inline-block" }}>Transaction</h1>
+        <UpdateTransaction
+          handleSubmit={handleSubmit}
+          buttons={buttons}
+          object={[]}
+        />
+        <div
+          className="ag-theme-alpine"
+          style={{ height: "80vh", width: "100%" }}
+        >
+          <AgGridReact
+            defaultColDef={{
+              initialWidth: 160,
+              filter: true,
+            }}
+            onGridReady={onGridReady}
+            columnDefs={columnDefs}
+            rowData={transaction}
+            rowDragManaged="true"
+          ></AgGridReact>
+        </div>
       </React.Fragment>
     );
   }

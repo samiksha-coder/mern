@@ -49,7 +49,6 @@ const validateStorage = (input) => {
 
 const saveStorage = async (input) => {
   const { button, quantity, unit } = input;
-  console.log("button", button);
   let storage = new Storage({
     button: button,
     quantity,
@@ -57,20 +56,15 @@ const saveStorage = async (input) => {
   });
   return await storage.save();
 };
-const updateStorage = async (filter, input) => {
-  console.log(`filter`, filter);
-  console.log(`input`, input);
-  const { button, unit, quantity } = input;
-  let storage = (
-    await Storage.findOneAndUpdate(filter, { quantity, unit })
-  ).$set({
+const updateStorage = async (id, input) => {
+  const { unit, quantity } = input;
+  let storage = (await Storage.findByIdAndUpdate(id, { quantity, unit })).$set({
     updated: new Date(),
   });
   await storage.save();
   return await storage.populate("button");
 };
 const findStorage = async (input) => {
-  console.log(`input`, input);
   return await Storage.find(input)
     .populate("button")
     .sort("-updated button._name");

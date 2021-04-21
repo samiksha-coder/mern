@@ -20,10 +20,6 @@ export const validateData = async (input, API) => {
 
 export const saveData = async (input, API) => {
   try {
-    // const button = JSON.stringify(input.button);
-    // input.button = button;
-    console.log("input", input);
-    console.log("stringified", JSON.stringify(input));
     let response = await fetch(API, {
       method: "post",
       mode: "cors",
@@ -42,10 +38,6 @@ export const saveData = async (input, API) => {
 
 export const updateData = async (input, API) => {
   try {
-    // const button = JSON.stringify(input.button);
-    // input.button = button;
-    console.log("input", input);
-    console.log("stringified", JSON.stringify(input));
     let response = await fetch(API, {
       method: "put",
       mode: "cors",
@@ -94,7 +86,6 @@ export const setErrorMessage = (id, message) => {
 
 export const collectFormData = (e, formData, setFormData) => {
   const { id, value } = e.target;
-  console.log(id, value);
   let data = formData;
   data[id] = value;
   setFormData(data);

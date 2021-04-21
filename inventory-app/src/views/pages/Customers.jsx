@@ -13,7 +13,6 @@ export default function Customers(props) {
         else throw Error("Error");
       })
       .then((jsondata) => {
-        console.log("jsondata", jsondata);
         setIsLoaded(true);
         setCustomers(jsondata);
       })

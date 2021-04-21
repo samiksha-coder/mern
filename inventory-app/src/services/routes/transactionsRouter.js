@@ -1,4 +1,5 @@
 const express = require("express");
+
 const {
   findStorageObject,
   saveStorage,
@@ -9,15 +10,19 @@ const {
   Transaction,
   validateTransaction,
   saveTransaction,
+  findTransaction,
 } = require("../../models/transactions");
+const { tryParseJSON, tryParseFloat } = require("../../utils/conversionUtils");
 
 router.post("/", async (request, response) => {
   let input = request.body;
   let { button, type, quantity, unit } = input;
+  button = tryParseJSON(button);
+  quantity = tryParseFloat(quantity);
   const { error } = validateTransaction(input);
   if (error) return response.status(400).send(error.details[0].message);
   try {
-    let storageObject = await findStorageObject({ button, unit });
+    let storageObject = await findStorageObject({ button: button._id, unit });
     if (!storageObject || storageObject.length === 0)
       storageObject = await saveStorage({ button, unit, quantity: 0 });
 
@@ -29,10 +34,10 @@ router.post("/", async (request, response) => {
     }
     if (type === "BUY") finalQuanity = storageObject.quantity + quantity;
 
-    let transaction = await saveTransaction(input);
+    let transaction = await saveTransaction({ button, type, quantity, unit });
     transaction.populate("button customer");
 
-    updateStorage(storageObject, {
+    await updateStorage(storageObject._id, {
       button: transaction.button,
       quantity: finalQuanity,
       unit,
@@ -51,9 +56,7 @@ router.get("/", async (request, response) => {
       query._id = query.id;
       delete query.id;
     }
-    const transaction = await Transaction.find(query).populate(
-      "customer button"
-    );
+    const transaction = await findTransaction(query);
     response.status(200).send(transaction);
   } catch (error) {
     response.send(error.message);
