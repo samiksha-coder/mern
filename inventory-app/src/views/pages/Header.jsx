@@ -17,9 +17,9 @@ export default function Header() {
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link as={Link} to="/dashboard">
+          {/* <Nav.Link as={Link} to="/dashboard">
             Dashboard
-          </Nav.Link>
+          </Nav.Link> */}
           <Nav.Link as={Link} to="/transactions">
             Transactions
           </Nav.Link>
@@ -29,14 +29,14 @@ export default function Header() {
           <Nav.Link as={Link} to="/buttons">
             Buttons
           </Nav.Link>
-          <NavDropdown title="Actions" id="collasible-nav-dropdown">
+          {/* <NavDropdown title="Actions" id="collasible-nav-dropdown">
             <NavDropdown.Item as={Link} to="/newButton">
               New Button Type
             </NavDropdown.Item>
             <NavDropdown.Item as={Link} to="/newCustomer">
               New Customer
             </NavDropdown.Item>
-          </NavDropdown>
+          </NavDropdown> */}
         </Nav>
       </Navbar.Collapse>
     </Navbar>
