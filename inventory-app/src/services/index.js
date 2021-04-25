@@ -2,7 +2,9 @@ const appDebugger = require("debug")("app.startup");
 const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+var bodyParser = require("body-parser");
 var cors = require("cors");
+const multer = require("multer");
 
 process.env["NODE_CONFIG_DIR"] = "./src/config";
 const config = require("config");
@@ -11,11 +13,16 @@ const customerRouter = require("./routes/customerRouter");
 const buttonRouter = require("./routes/buttonRouter");
 const transactionsRouter = require("./routes/transactionsRouter");
 const storageRouter = require("./routes/storageRouter");
+const fileFilter = require("../utils/multerUtils");
+const storage = multer.memoryStorage();
+let upload = multer({ storage, fileFilter });
 
 const app = express();
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
+app.use(upload.array());
+app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(config.API.CUSTOMER, customerRouter);

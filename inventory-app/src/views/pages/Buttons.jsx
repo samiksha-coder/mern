@@ -3,7 +3,7 @@ import _ from "lodash";
 import { SERVICE_URL, API } from "../../config/default.json";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { saveData, collectFormData } from "../common/customHooks";
+import { saveData, collectFormData, handlePhoto } from "../common/customHooks";
 import { Col, Row } from "react-bootstrap";
 
 export default function Buttons() {
@@ -59,7 +59,7 @@ export default function Buttons() {
         <h1>Buttons</h1>
         <Row>
           <Col>
-            <Form id="newButton">
+            <Form id="newButton" encType="multipart/form-data">
               <Form.Group controlId="name">
                 <Form.Label>Name</Form.Label>
                 <Form.Control
@@ -79,6 +79,14 @@ export default function Buttons() {
                 <Form.Control
                   type="text"
                   onChange={(e) => collectFormData(e, formData, setFormData)}
+                />
+              </Form.Group>
+              <Form.Group controlId="photo">
+                <Form.Label>Photo</Form.Label>
+                <Form.Control
+                  type="file"
+                  accept=".png, .jpg, .jpeg"
+                  onChange={(e) => handlePhoto(e, formData, setFormData)}
                 />
               </Form.Group>
               <Form.Group controlId="submit">

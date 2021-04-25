@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form } from "react-bootstrap";
-import { AgGridColumn, AgGridReact } from "ag-grid-react";
+import { AgGridReact } from "ag-grid-react";
 
 import "ag-grid-enterprise";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 
-import { SERVICE_URL, API, ENUM } from "../../config/default.json";
-import {
-  collectFormData,
-  saveData,
-  getUnitDropdown,
-  getTypeDropdown,
-} from "../common/customHooks";
+import { SERVICE_URL, API } from "../../config/default.json";
+import { saveData } from "../common/customHooks";
 import { txDateFormatter } from "../common/tableRenderHooks";
 import UpdateTransaction from "../components/UpdateTransaction";
 
@@ -46,16 +40,6 @@ export default function Transactions() {
         setError(error);
       });
   }, [isUpdated, setUpdated]);
-
-  const createButtonDropdown = () => {
-    return buttons.map((button) => {
-      return (
-        <option value={button._id}>
-          {button.name} {button.material} {button.polish}
-        </option>
-      );
-    });
-  };
 
   const handleSubmit = async (e, formData) => {
     const result = await saveData(formData, SERVICE_URL + API.TRANSACTION);

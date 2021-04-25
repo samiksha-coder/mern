@@ -20,14 +20,20 @@ export const validateData = async (input, API) => {
 
 export const saveData = async (input, API) => {
   try {
+    console.log(`input`, input);
+    var form_data = new FormData();
+
+    for (var key in input) {
+      form_data.append(key, input[key]);
+    }
     let response = await fetch(API, {
       method: "post",
       mode: "cors",
       headers: {
-        "Content-Type": "application/json",
-        "Content-Disposition": "form-data",
+        "Content-Type": "multipart/form-data",
+        "Content-Disposition": "multipart/form-data",
       },
-      body: JSON.stringify(input),
+      body: form_data,
     });
     return await readResponse(response);
   } catch (error) {
@@ -42,8 +48,8 @@ export const updateData = async (input, API) => {
       method: "put",
       mode: "cors",
       headers: {
-        "Content-Type": "application/json",
-        "Content-Disposition": "form-data",
+        // "Content-Type": "application/json",
+        // "Content-Disposition": "form-data",
       },
       body: JSON.stringify(input),
     });
@@ -99,4 +105,8 @@ export const dateFormatter = (input) => {
     hour12: true,
   });
   return dateFormat.format(dateObj);
+};
+
+export const handlePhoto = (e, formData, setFormData) => {
+  setFormData({ ...formData, photo: e.target.files[0] });
 };
